@@ -2,6 +2,7 @@ package br.unicap.si.poo.project.demo.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -10,6 +11,7 @@ import br.unicap.si.poo.project.demo.repository.JogadorRepository;
 
 @Service
 public class JogadorService {
+
     @Autowired
     private JogadorRepository repository;
 
@@ -22,6 +24,9 @@ public class JogadorService {
     }
 
     public Jogador salvar(Jogador jogador) {
+        if (jogador.getId() == null) {
+            jogador.setDataCadastro(LocalDate.now());
+        }
         return repository.save(jogador);
     }
 
@@ -30,6 +35,9 @@ public class JogadorService {
             jogador.setNome(jogadorAtualizado.getNome());
             jogador.setIdade(jogadorAtualizado.getIdade());
             jogador.setPontuacaoTotal(jogadorAtualizado.getPontuacaoTotal());
+            jogador.setEmail(jogadorAtualizado.getEmail());
+            jogador.setSenha(jogadorAtualizado.getSenha());
+            jogador.setTipo(jogadorAtualizado.getTipo());
             return repository.save(jogador);
         }).orElseThrow(() -> new RuntimeException("Jogador não encontrado"));
     }

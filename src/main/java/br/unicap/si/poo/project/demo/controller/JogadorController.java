@@ -1,11 +1,16 @@
 package br.unicap.si.poo.project.demo.controller;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
+
 import java.util.List;
 
 import br.unicap.si.poo.project.demo.model.Jogador;
 import br.unicap.si.poo.project.demo.service.JogadorService;
+
 
 @RestController
 @RequestMapping("/jogadores")
@@ -21,10 +26,12 @@ public class JogadorController {
 
     @GetMapping("/{id}")
     public Jogador buscarPorId(@PathVariable Long id) {
-        return service.buscarPorId(id).orElseThrow(() -> new RuntimeException("Jogador não encontrado"));
+        return service.buscarPorId(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Jogador não encontrado"));
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public Jogador criar(@RequestBody Jogador jogador) {
         return service.salvar(jogador);
     }
@@ -35,6 +42,7 @@ public class JogadorController {
     }
 
     @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deletar(@PathVariable Long id) {
         service.deletar(id);
     }

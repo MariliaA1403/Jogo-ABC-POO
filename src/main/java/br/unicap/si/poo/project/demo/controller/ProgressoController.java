@@ -1,46 +1,44 @@
 /* 
 package br.unicap.si.poo.project.demo.controller;
 
-import br.unicap.si.poo.project.demo.model.Jogo;
-import br.unicap.si.poo.project.demo.service.JogoService;
+import br.unicap.si.poo.project.demo.model.Progresso;
+import br.unicap.si.poo.project.demo.service.ProgressoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/jogos")
-public class JogoController {
+@RequestMapping("/progresso")
+public class ProgressoController {
 
     @Autowired
-    private JogoService service;
+    private ProgressoService service;
 
     @GetMapping
-    public ResponseEntity<List<Jogo>> listar() {
-        List<Jogo> jogos = service.listar();
-        return ResponseEntity.ok(jogos);
+    public ResponseEntity<List<Progresso>> listar() {
+        List<Progresso> lista = service.listar();
+        return ResponseEntity.ok(lista);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Jogo> buscar(@PathVariable Long id) {
+    public ResponseEntity<Progresso> buscar(@PathVariable Long id) {
         return service.buscarPorId(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public ResponseEntity<Jogo> criar(@RequestBody Jogo jogo) {
-        Jogo criado = service.salvar(jogo);
-        URI location = URI.create("/jogos/" + criado.getId());
-        return ResponseEntity.created(location).body(criado);
+    public ResponseEntity<Progresso> criar(@RequestBody Progresso progresso) {
+        Progresso criado = service.salvar(progresso);
+        return ResponseEntity.ok(criado);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Jogo> atualizar(@PathVariable Long id, @RequestBody Jogo jogo) {
+    public ResponseEntity<Progresso> atualizar(@PathVariable Long id, @RequestBody Progresso progresso) {
         try {
-            Jogo atualizado = service.atualizar(id, jogo);
+            Progresso atualizado = service.atualizar(id, progresso);
             return ResponseEntity.ok(atualizado);
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
